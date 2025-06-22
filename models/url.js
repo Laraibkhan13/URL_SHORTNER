@@ -1,7 +1,7 @@
 const mongoose= require('mongoose');
 
 const URLSchema = new mongoose.Schema({
-    shorURL:{
+    shortURL:{
         type:String,
         required:true,
         unique:true,
@@ -13,7 +13,16 @@ const URLSchema = new mongoose.Schema({
     createdAt:{
         type:Date,
         default: Date.now,
-    }
+    },
+    visitedHistory:[
+        {
+            timestamp:{
+                type: Date,
+                default: Date.now
+            }
+        }
+        
+    ]
 
 });
 

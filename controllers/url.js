@@ -1,7 +1,8 @@
 
 const { nanoid }=require('nanoid');
+const URL=require('../models/url');
 
-async function handleGeneratedShortURL(req,re){
+async function handleGeneratedShortURL(req,res){
 
     const body=req.body;
 
@@ -11,15 +12,50 @@ async function handleGeneratedShortURL(req,re){
     }
     const shortID=nanoid(8);
 
-    await URL.createObjectURL({
-        shortId:shortID,
-        redirectedURl:body.url,
+    await URL.create({
+        shortURL:shortID,
+        originalURL:body.url,
         createdAt: new Date()
-    })
+    });
+
+    
+
+    
 
     return res.json({id:shortID});
 }
 
-moduel.exports={
-    handleGeneratedShortURL
+
+async function handleGetShortURL(req, res) {
+    const shortID = req.params.shortID;
+
+    if (!shortID) {
+        return res.status(400).json({ error: 'shortID is required' });
+    }
+
+    try {
+        // Find and update in one step
+        const record = await URL.findOneAndUpdate(
+            { shortURL: shortID },
+            { $push: { visitedHistory: new Date() } },
+            { new: true }
+        );
+
+        if (!record) {
+            return res.status(404).json({ error: 'URL not found' });
+        }
+
+        // Redirect to the original URL
+        return res.redirect(record.originalURL);
+    } catch (err) {
+        console.error('Error finding short URL:', err);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+
+
+module.exports={
+    handleGeneratedShortURL,
+    handleGetShortURL
 }
