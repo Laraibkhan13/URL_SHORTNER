@@ -18,8 +18,10 @@ async function handleGeneratedShortURL(req,res){
         createdAt: new Date()
     });
 
-    
-    return res.json({id:shortID});
+    return res.render('home',{
+        id:shortID,
+    })
+    // return res.json({id:shortID});
 }
 
 

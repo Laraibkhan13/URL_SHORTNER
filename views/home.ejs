@@ -8,9 +8,39 @@
 <body>
     <div>
         <h1>URLS</h1>
-        <% urls.forEach(url => { %>
-         <li><%= url.shortURL %></li>
-        <% }) %>
+        <form method="POST" action="/url">
+            <label>Enter your URL</label>
+            <input type="text" name="url" placeholder="https://example.com" required>
+            <button type="submit">Generate</button>
+        </form>
+        
+        <% if (locals.id) { %>
+         <p>URL Generated : http://localhost:8001/url/<%= id %></p>
+        <% } %>
+
+        <h2>URL data</h2>
+        <% if (locals.urls) { %>
+            <table>
+                <thead>
+                    <th>S No</th>
+                    <th>ShortURL</th>
+                    <th>originalURL</th>
+                    <th>Totoal Hits</th>
+                </thead>
+                <tbody>
+                    <% urls.forEach((url,index) => { %>
+                     <tr>
+                     <td><%= index +1 %></td>
+                     <td><%= url.shortURL %></td>
+                     <td><%= url.originalURL %></td>
+                     <td><%= url.visitedHistory.length %></td>
+                    </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        <% } %>
+       
+        
           
     </div>
 </body>
