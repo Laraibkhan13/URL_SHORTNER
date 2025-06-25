@@ -19,9 +19,6 @@ async function handleGeneratedShortURL(req,res){
     });
 
     
-
-    
-
     return res.json({id:shortID});
 }
 
@@ -53,9 +50,27 @@ async function handleGetShortURL(req, res) {
     }
 }
 
+async function getAnalytics(req,res){
+    const shortID = req.params.shortID;
+    if (!shortID) {
+        return res.status(400).json({ error: 'shortID is required' });
+    }
+
+    const record=await URL.findOne({ shortURL: shortID });
+    if (!record) {
+        return res.status(404).json({ error: 'URL not found' });
+    }
+
+    return res.json({
+        totalhits:record.visitedHistory.length,
+    })
+
+}
+
 
 
 module.exports={
     handleGeneratedShortURL,
-    handleGetShortURL
+    handleGetShortURL,
+    getAnalytics
 }
