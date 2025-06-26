@@ -17,9 +17,12 @@ async function handleGeneratedShortURL(req,res){
         originalURL:body.url,
         createdAt: new Date()
     });
+    const allurls= await URL.find({});
 
     return res.render('home',{
         id:shortID,
+        urls:allurls,
+
     })
     // return res.json({id:shortID});
 }
@@ -66,6 +69,8 @@ async function getAnalytics(req,res){
     return res.json({
         totalhits:record.visitedHistory.length,
     })
+
+
 
 }
 
