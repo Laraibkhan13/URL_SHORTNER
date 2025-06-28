@@ -15,7 +15,8 @@ async function handleGeneratedShortURL(req,res){
     await URL.create({
         shortURL:shortID,
         originalURL:body.url,
-        createdAt: new Date()
+        createdAt: new Date(),
+        createdBy:req.user._id // Assuming req.user is set by authentication middleware
     });
     const allurls= await URL.find({});
 

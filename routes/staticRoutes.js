@@ -5,7 +5,7 @@ const URL=require('../models/url');
 
 
 router.get('/',async(req,res)=>{
-    const allurls= await URL.find({});
+    const allurls= await URL.find({createdBy:req.user._id});
     return res.render('home',{
         urls:allurls,
     });
